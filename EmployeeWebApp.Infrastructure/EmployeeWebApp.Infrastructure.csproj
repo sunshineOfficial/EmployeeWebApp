@@ -11,4 +11,15 @@
       <ProjectReference Include="..\EmployeeWebApp.Domain\EmployeeWebApp.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="dbup-postgresql" Version="5.0.37" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="SqlScripts\Script0001 - Create tables.sql" />
+      <EmbeddedResource Include="SqlScripts\Script0001 - Create tables.sql" />
+    </ItemGroup>
+
 </Project>
