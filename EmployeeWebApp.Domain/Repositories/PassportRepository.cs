@@ -53,7 +53,7 @@ public class PassportRepository : IPassportRepository
         var sql = @"UPDATE ""Passports""
                     SET
                         ""Type"" = CASE WHEN @Type IS NULL THEN ""Type"" ELSE @Type END,
-                        ""Number"" = CASE WHEN @Number IS NULL THEN ""Number"" ELSE @Number END,
+                        ""Number"" = CASE WHEN @Number IS NULL THEN ""Number"" ELSE @Number END
                     WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id, updatedPassport.Type, updatedPassport.Number });
