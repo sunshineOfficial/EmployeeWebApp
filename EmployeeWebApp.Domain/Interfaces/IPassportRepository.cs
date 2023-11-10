@@ -20,4 +20,17 @@ public interface IPassportRepository
     /// <param name="id">Id паспорта.</param>
     /// <returns>Паспорт с указанным id.</returns>
     Task<Passport> GetPassportAsync(int id);
+    
+    /// <summary>
+    /// Изменяет паспорт по id.
+    /// </summary>
+    /// <param name="id">Id паспорта.</param>
+    /// <param name="updatedPassport">Измененный паспорт.</param>
+    Task UpdatePassportAsync(int id, Passport updatedPassport);
+    
+    /// <summary>
+    /// Удаляет паспорт по id.
+    /// </summary>
+    /// <param name="id">Id паспорта.</param>
+    Task DeletePassportAsync(int id);
 }

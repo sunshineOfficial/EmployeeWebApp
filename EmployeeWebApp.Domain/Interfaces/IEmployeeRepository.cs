@@ -35,7 +35,7 @@ public interface IEmployeeRepository
     Task<IEnumerable<Employee>> GetEmployeesByDepartmentIdAsync(int departmentId);
 
     /// <summary>
-    /// Изменяет сотрудника по его id.
+    /// Изменяет сотрудника по id.
     /// </summary>
     /// <param name="id">Id сотрудника.</param>
     /// <param name="updatedEmployee">Измененный сотрудник.</param>

@@ -44,4 +44,28 @@ public class PassportRepository : IPassportRepository
 
         return passport;
     }
+    
+    /// <inheritdoc/>
+    public async Task UpdatePassportAsync(int id, Passport updatedPassport)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"UPDATE ""Passports""
+                    SET
+                        ""Type"" = CASE WHEN @Type IS NULL THEN ""Type"" ELSE @Type END,
+                        ""Number"" = CASE WHEN @Number IS NULL THEN ""Number"" ELSE @Number END,
+                    WHERE ""Id"" = @Id;";
+
+        await connection.ExecuteAsync(sql, new { Id = id, updatedPassport.Type, updatedPassport.Number });
+    }
+
+    /// <inheritdoc/>
+    public async Task DeletePassportAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"DELETE FROM ""Passports"" WHERE ""Id"" = @Id;";
+
+        await connection.ExecuteAsync(sql, new { Id = id });
+    }
 }

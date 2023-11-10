@@ -83,6 +83,15 @@ public class EmployeeRepository : IEmployeeRepository
                         ""DepartmentId"" = CASE WHEN @DepartmentId IS NULL THEN ""DepartmentId"" ELSE @DepartmentId END
                     WHERE ""Id"" = @Id;";
 
-        await connection.ExecuteAsync(sql, updatedEmployee);
+        await connection.ExecuteAsync(sql, new
+        {
+            Id = id,
+            updatedEmployee.Name,
+            updatedEmployee.Surname,
+            updatedEmployee.Phone,
+            updatedEmployee.CompanyId,
+            updatedEmployee.PassportId,
+            updatedEmployee.DepartmentId
+        });
     }
 }

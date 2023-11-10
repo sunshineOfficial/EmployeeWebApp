@@ -20,4 +20,17 @@ public interface IDepartmentRepository
     /// <param name="id">Id отдела.</param>
     /// <returns>Отдел с указанным id.</returns>
     Task<Department> GetDepartmentAsync(int id);
+    
+    /// <summary>
+    /// Изменяет отдел по id.
+    /// </summary>
+    /// <param name="id">Id отдела.</param>
+    /// <param name="updatedDepartment">Измененный отдел.</param>
+    Task UpdateDepartmentAsync(int id, Department updatedDepartment);
+    
+    /// <summary>
+    /// Удаляет отдел по id.
+    /// </summary>
+    /// <param name="id">Id отдела.</param>
+    Task DeleteDepartmentAsync(int id);
 }

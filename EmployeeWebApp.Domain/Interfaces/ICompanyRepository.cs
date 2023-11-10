@@ -20,4 +20,17 @@ public interface ICompanyRepository
     /// <param name="id">Id компании.</param>
     /// <returns>Компания с указанным id.</returns>
     Task<Company> GetCompanyAsync(int id);
+    
+    /// <summary>
+    /// Изменяет компанию по id.
+    /// </summary>
+    /// <param name="id">Id компании.</param>
+    /// <param name="updatedCompany">Измененная компания.</param>
+    Task UpdateCompanyAsync(int id, Company updatedCompany);
+    
+    /// <summary>
+    /// Удаляет компанию по id.
+    /// </summary>
+    /// <param name="id">Id компании.</param>
+    Task DeleteCompanyAsync(int id);
 }

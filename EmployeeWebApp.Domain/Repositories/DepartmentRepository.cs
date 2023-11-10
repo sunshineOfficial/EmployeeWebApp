@@ -44,4 +44,27 @@ public class DepartmentRepository : IDepartmentRepository
 
         return department;
     }
+    
+    /// <inheritdoc/>
+    public async Task UpdateDepartmentAsync(int id, Department updatedDepartment)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"UPDATE ""Departments""
+                    SET ""Name"" = CASE WHEN @Name IS NULL THEN ""Name"" ELSE @Name END,
+                    SET ""Phone"" = CASE WHEN @Phone IS NULL THEN ""Phone"" ELSE @Phone END
+                    WHERE ""Id"" = @Id;";
+
+        await connection.ExecuteAsync(sql, new { Id = id, updatedDepartment.Name, updatedDepartment.Phone });
+    }
+
+    /// <inheritdoc/>
+    public async Task DeleteDepartmentAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"DELETE FROM ""Departments"" WHERE ""Id"" = @Id;";
+
+        await connection.ExecuteAsync(sql, new { Id = id });
+    }
 }

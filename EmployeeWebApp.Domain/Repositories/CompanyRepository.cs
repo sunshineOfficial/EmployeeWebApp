@@ -44,4 +44,26 @@ public class CompanyRepository : ICompanyRepository
 
         return company;
     }
+
+    /// <inheritdoc/>
+    public async Task UpdateCompanyAsync(int id, Company updatedCompany)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"UPDATE ""Companies""
+                    SET ""Name"" = CASE WHEN @Name IS NULL THEN ""Name"" ELSE @Name END
+                    WHERE ""Id"" = @Id;";
+
+        await connection.ExecuteAsync(sql, new { Id = id, updatedCompany.Name });
+    }
+
+    /// <inheritdoc/>
+    public async Task DeleteCompanyAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"DELETE FROM ""Companies"" WHERE ""Id"" = @Id;";
+
+        await connection.ExecuteAsync(sql, new { Id = id });
+    }
 }
