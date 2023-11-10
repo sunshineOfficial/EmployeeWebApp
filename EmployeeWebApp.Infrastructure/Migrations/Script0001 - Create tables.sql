@@ -1,11 +1,11 @@
-CREATE TABLE public."Companies"
+CREATE TABLE IF NOT EXISTS public."Companies"
 (
     "Id" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     "Name" character varying(50)[] NOT NULL,
     PRIMARY KEY ("Id")
 );
 
-CREATE TABLE public."Passports"
+CREATE TABLE IF NOT EXISTS public."Passports"
 (
     "Id" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     "Type" character varying(50)[] NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE public."Passports"
     PRIMARY KEY ("Id")
 );
 
-CREATE TABLE public."Departments"
+CREATE TABLE IF NOT EXISTS public."Departments"
 (
     "Id" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     "Name" character varying(50)[] NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE public."Departments"
     PRIMARY KEY ("Id")
 );
 
-CREATE TABLE public."Employees"
+CREATE TABLE IF NOT EXISTS public."Employees"
 (
     "Id" integer NOT NULL GENERATED ALWAYS AS IDENTITY,
     "Name" character varying(50)[] NOT NULL,

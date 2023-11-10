@@ -1,29 +1,27 @@
 using Dapper;
 using EmployeeWebApp.Domain.Entities;
 using EmployeeWebApp.Domain.Interfaces;
-using EmployeeWebApp.Domain.Models;
-using EmployeeWebApp.Infrastructure.Configuration;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace EmployeeWebApp.Infrastructure.Repositories;
+namespace EmployeeWebApp.Domain.Repositories;
 
 /// <summary>
 /// Репозиторий для взаимодействия с сущностью <see cref="Company"/>.
 /// </summary>
 public class CompanyRepository : ICompanyRepository
 {
-    private readonly ConnectionStringsSettings _settings;
+    private readonly string _dbConnection;
 
-    public CompanyRepository(IOptions<ConnectionStringsSettings> settings)
+    public CompanyRepository(IConfiguration configuration)
     {
-        _settings = settings.Value;
+        _dbConnection = configuration.GetConnectionString("DatabaseConnection");
     }
-    
+
     /// <inheritdoc/>
-    public async Task<int> AddCompany(CompanyModel company)
+    public async Task<int> AddCompanyAsync(Company company)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
         
         var sql = @"INSERT INTO ""Companies"" (""Name"")
                     VALUES (@Name)
@@ -35,9 +33,9 @@ public class CompanyRepository : ICompanyRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Company> GetCompany(int id)
+    public async Task<Company> GetCompanyAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Companies""
                     WHERE ""Id"" = @Id;";

@@ -1,5 +1,4 @@
 using EmployeeWebApp.Domain.Entities;
-using EmployeeWebApp.Domain.Models;
 
 namespace EmployeeWebApp.Domain.Interfaces;
 
@@ -13,12 +12,12 @@ public interface ICompanyRepository
     /// </summary>
     /// <param name="company">Новая компания.</param>
     /// <returns>Id добавленной компании.</returns>
-    Task<int> AddCompany(CompanyModel company);
+    Task<int> AddCompanyAsync(Company company);
 
     /// <summary>
     /// Получает компанию.
     /// </summary>
     /// <param name="id">Id компании.</param>
     /// <returns>Компания с указанным id.</returns>
-    Task<Company> GetCompany(int id);
+    Task<Company> GetCompanyAsync(int id);
 }

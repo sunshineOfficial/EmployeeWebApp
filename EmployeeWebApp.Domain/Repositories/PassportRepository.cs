@@ -1,29 +1,27 @@
 using Dapper;
 using EmployeeWebApp.Domain.Entities;
 using EmployeeWebApp.Domain.Interfaces;
-using EmployeeWebApp.Domain.Models;
-using EmployeeWebApp.Infrastructure.Configuration;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace EmployeeWebApp.Infrastructure.Repositories;
+namespace EmployeeWebApp.Domain.Repositories;
 
 /// <summary>
 /// Репозиторий для взаимодействия с сущностью <see cref="Passport"/>.
 /// </summary>
 public class PassportRepository : IPassportRepository
 {
-    private readonly ConnectionStringsSettings _settings;
+    private readonly string _dbConnection;
 
-    public PassportRepository(IOptions<ConnectionStringsSettings> settings)
+    public PassportRepository(IConfiguration configuration)
     {
-        _settings = settings.Value;
+        _dbConnection = configuration.GetConnectionString("DatabaseConnection");
     }
     
     /// <inheritdoc/>
-    public async Task<int> AddPassport(PassportModel passport)
+    public async Task<int> AddPassportAsync(Passport passport)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
         
         var sql = @"INSERT INTO ""Passports"" (""Type"", ""Number"")
                     VALUES (@Type, @Number)
@@ -35,9 +33,9 @@ public class PassportRepository : IPassportRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Passport> GetPassport(int id)
+    public async Task<Passport> GetPassportAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Passports""
                     WHERE ""Id"" = @Id;";

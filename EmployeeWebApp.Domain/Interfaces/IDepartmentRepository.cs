@@ -1,5 +1,4 @@
 using EmployeeWebApp.Domain.Entities;
-using EmployeeWebApp.Domain.Models;
 
 namespace EmployeeWebApp.Domain.Interfaces;
 
@@ -13,12 +12,12 @@ public interface IDepartmentRepository
     /// </summary>
     /// <param name="department">Новый отдел.</param>
     /// <returns>Id добавленного отдела.</returns>
-    Task<int> AddDepartment(DepartmentModel department);
+    Task<int> AddDepartmentAsync(Department department);
 
     /// <summary>
     /// Получает отдел.
     /// </summary>
     /// <param name="id">Id отдела.</param>
     /// <returns>Отдел с указанным id.</returns>
-    Task<Department> GetDepartment(int id);
+    Task<Department> GetDepartmentAsync(int id);
 }

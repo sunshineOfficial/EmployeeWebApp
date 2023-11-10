@@ -1,29 +1,27 @@
 using Dapper;
 using EmployeeWebApp.Domain.Entities;
 using EmployeeWebApp.Domain.Interfaces;
-using EmployeeWebApp.Domain.Models;
-using EmployeeWebApp.Infrastructure.Configuration;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace EmployeeWebApp.Infrastructure.Repositories;
+namespace EmployeeWebApp.Domain.Repositories;
 
 /// <summary>
 /// Репозиторий для взаимодействия с сущностью <see cref="Department"/>.
 /// </summary>
 public class DepartmentRepository : IDepartmentRepository
 {
-    private readonly ConnectionStringsSettings _settings;
+    private readonly string _dbConnection;
 
-    public DepartmentRepository(IOptions<ConnectionStringsSettings> settings)
+    public DepartmentRepository(IConfiguration configuration)
     {
-        _settings = settings.Value;
+        _dbConnection = configuration.GetConnectionString("DatabaseConnection");
     }
     
     /// <inheritdoc/>
-    public async Task<int> AddDepartment(DepartmentModel department)
+    public async Task<int> AddDepartmentAsync(Department department)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
         
         var sql = @"INSERT INTO ""Departments"" (""Name"", ""Phone"")
                     VALUES (@Name, @Phone)
@@ -35,9 +33,9 @@ public class DepartmentRepository : IDepartmentRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Department> GetDepartment(int id)
+    public async Task<Department> GetDepartmentAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Departments""
                     WHERE ""Id"" = @Id;";

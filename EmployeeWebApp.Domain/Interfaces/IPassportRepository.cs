@@ -1,5 +1,4 @@
 using EmployeeWebApp.Domain.Entities;
-using EmployeeWebApp.Domain.Models;
 
 namespace EmployeeWebApp.Domain.Interfaces;
 
@@ -13,12 +12,12 @@ public interface IPassportRepository
     /// </summary>
     /// <param name="passport">Новый паспорт.</param>
     /// <returns>Id добавленного паспорта.</returns>
-    Task<int> AddPassport(PassportModel passport);
+    Task<int> AddPassportAsync(Passport passport);
 
     /// <summary>
     /// Получает паспорт.
     /// </summary>
     /// <param name="id">Id паспорта.</param>
     /// <returns>Паспорт с указанным id.</returns>
-    Task<Passport> GetPassport(int id);
+    Task<Passport> GetPassportAsync(int id);
 }

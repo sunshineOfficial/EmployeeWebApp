@@ -1,5 +1,4 @@
 using EmployeeWebApp.Domain.Entities;
-using EmployeeWebApp.Domain.Models;
 
 namespace EmployeeWebApp.Domain.Interfaces;
 
@@ -13,32 +12,32 @@ public interface IEmployeeRepository
     /// </summary>
     /// <param name="employee">Новый сотрудник.</param>
     /// <returns>Id добавленного сотрудника.</returns>
-    Task<int> AddEmployee(EmployeeModel employee);
+    Task<int> AddEmployeeAsync(Employee employee);
     
     /// <summary>
     /// Удаляет сотрудника по id.
     /// </summary>
     /// <param name="id">Id сотрудника.</param>
-    Task DeleteEmployee(int id);
+    Task DeleteEmployeeAsync(int id);
     
     /// <summary>
     /// Получает всех сотрудников для указанной компании.
     /// </summary>
     /// <param name="companyId">Id компании.</param>
     /// <returns>Перечисление, содержащее всех сотрудников для указанной компании.</returns>
-    Task<IEnumerable<EmployeeResponseModel>> GetEmployeesByCompanyId(int companyId);
+    Task<IEnumerable<Employee>> GetEmployeesByCompanyIdAsync(int companyId);
     
     /// <summary>
     /// Получает всех сотрудников для указанного отдела.
     /// </summary>
     /// <param name="departmentId">Id отдела.</param>
     /// <returns>Перечисление, содержащее всех сотрудников для указанного отдела.</returns>
-    Task<IEnumerable<EmployeeResponseModel>> GetEmployeesByDepartmentId(int departmentId);
+    Task<IEnumerable<Employee>> GetEmployeesByDepartmentIdAsync(int departmentId);
 
     /// <summary>
     /// Изменяет сотрудника по его id.
     /// </summary>
     /// <param name="id">Id сотрудника.</param>
     /// <param name="updatedEmployee">Измененный сотрудник.</param>
-    Task UpdateEmployee(int id, EmployeeModel updatedEmployee);
+    Task UpdateEmployeeAsync(int id, Employee updatedEmployee);
 }

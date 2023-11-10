@@ -12,18 +12,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Dapper" Version="2.1.15" />
       <PackageReference Include="dbup-postgresql" Version="5.0.37" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
       <PackageReference Include="Npgsql" Version="7.0.6" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="SqlScripts\Script0001 - Create tables.sql" />
-      <EmbeddedResource Include="SqlScripts\Script0001 - Create tables.sql" />
+      <EmbeddedResource Include="Migrations\Script0001 - Create tables.sql" />
     </ItemGroup>
 
 </Project>

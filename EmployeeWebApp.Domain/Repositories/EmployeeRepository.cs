@@ -1,29 +1,27 @@
 using Dapper;
 using EmployeeWebApp.Domain.Entities;
 using EmployeeWebApp.Domain.Interfaces;
-using EmployeeWebApp.Domain.Models;
-using EmployeeWebApp.Infrastructure.Configuration;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace EmployeeWebApp.Infrastructure.Repositories;
+namespace EmployeeWebApp.Domain.Repositories;
 
 /// <summary>
 /// Репозиторий для взаимодействия с сущностью <see cref="Employee"/>.
 /// </summary>
 public class EmployeeRepository : IEmployeeRepository
 {
-    private readonly ConnectionStringsSettings _settings;
+    private readonly string _dbConnection;
 
-    public EmployeeRepository(IOptions<ConnectionStringsSettings> settings)
+    public EmployeeRepository(IConfiguration configuration)
     {
-        _settings = settings.Value;
+        _dbConnection = configuration.GetConnectionString("DatabaseConnection");
     }
 
     /// <inheritdoc/>
-    public async Task<int> AddEmployee(EmployeeModel employee)
+    public async Task<int> AddEmployeeAsync(Employee employee)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"INSERT INTO ""Employees"" (""Name"", ""Surname"", ""Phone"", ""CompanyId"", ""PassportId"", ""DepartmentId"")
                     VALUES (@Name, @Surname, @Phone, @CompanyId, @PassportId, @DepartmentId)
@@ -35,9 +33,9 @@ public class EmployeeRepository : IEmployeeRepository
     }
 
     /// <inheritdoc/>
-    public async Task DeleteEmployee(int id)
+    public async Task DeleteEmployeeAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"DELETE FROM ""Employees"" WHERE ""Id"" = @Id;";
 
@@ -45,35 +43,35 @@ public class EmployeeRepository : IEmployeeRepository
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<EmployeeResponseModel>> GetEmployeesByCompanyId(int companyId)
+    public async Task<IEnumerable<Employee>> GetEmployeesByCompanyIdAsync(int companyId)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
-        var sql = @"SELECT ""Id"", ""Name"", ""Surname"", ""Phone"", ""CompanyId"", ""PassportId"", ""DepartmentId"" FROM ""Employees""
+        var sql = @"SELECT * FROM ""Employees""
                     WHERE ""CompanyId"" = @CompanyId;";
 
-        var employees = await connection.QueryAsync<EmployeeResponseModel>(sql, new { CompanyId = companyId });
+        var employees = await connection.QueryAsync<Employee>(sql, new { CompanyId = companyId });
 
         return employees;
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<EmployeeResponseModel>> GetEmployeesByDepartmentId(int departmentId)
+    public async Task<IEnumerable<Employee>> GetEmployeesByDepartmentIdAsync(int departmentId)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
-        var sql = @"SELECT ""Id"", ""Name"", ""Surname"", ""Phone"", ""CompanyId"", ""PassportId"", ""DepartmentId"" FROM ""Employees""
+        var sql = @"SELECT * FROM ""Employees""
                     WHERE ""DepartmentId"" = @DepartmentId;";
 
-        var employees = await connection.QueryAsync<EmployeeResponseModel>(sql, new { DepartmentId = departmentId });
+        var employees = await connection.QueryAsync<Employee>(sql, new { DepartmentId = departmentId });
 
         return employees;
     }
 
     /// <inheritdoc/>
-    public async Task UpdateEmployee(int id, EmployeeModel updatedEmployee)
+    public async Task UpdateEmployeeAsync(int id, Employee updatedEmployee)
     {
-        using var connection = new NpgsqlConnection(_settings.DatabaseConnection);
+        using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"UPDATE ""Employees""
                     SET
