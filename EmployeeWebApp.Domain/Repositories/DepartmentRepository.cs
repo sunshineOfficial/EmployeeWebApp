@@ -51,8 +51,9 @@ public class DepartmentRepository : IDepartmentRepository
         using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"UPDATE ""Departments""
-                    SET ""Name"" = CASE WHEN @Name IS NULL THEN ""Name"" ELSE @Name END,
-                    SET ""Phone"" = CASE WHEN @Phone IS NULL THEN ""Phone"" ELSE @Phone END
+                    SET
+                        ""Name"" = CASE WHEN @Name IS NULL THEN ""Name"" ELSE @Name END,
+                        ""Phone"" = CASE WHEN @Phone IS NULL THEN ""Phone"" ELSE @Phone END
                     WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id, updatedDepartment.Name, updatedDepartment.Phone });
