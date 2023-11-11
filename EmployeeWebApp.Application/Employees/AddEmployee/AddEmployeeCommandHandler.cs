@@ -1,6 +1,7 @@
 using EmployeeWebApp.Domain.Entities;
 using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
+using FluentValidation;
 using MediatR;
 
 namespace EmployeeWebApp.Application.Employees.AddEmployee;
@@ -14,13 +15,15 @@ public class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand, int
     private readonly ICompanyRepository _companyRepository;
     private readonly IPassportRepository _passportRepository;
     private readonly IDepartmentRepository _departmentRepository;
+    private readonly IValidator<AddEmployeeCommand> _validator;
 
-    public AddEmployeeCommandHandler(IEmployeeRepository employeeRepository, ICompanyRepository companyRepository, IPassportRepository passportRepository, IDepartmentRepository departmentRepository)
+    public AddEmployeeCommandHandler(IEmployeeRepository employeeRepository, ICompanyRepository companyRepository, IPassportRepository passportRepository, IDepartmentRepository departmentRepository, IValidator<AddEmployeeCommand> validator)
     {
         _employeeRepository = employeeRepository;
         _companyRepository = companyRepository;
         _passportRepository = passportRepository;
         _departmentRepository = departmentRepository;
+        _validator = validator;
     }
 
     /// <summary>
@@ -31,6 +34,13 @@ public class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand, int
     /// <returns>Id cотрудника.</returns>
     public async Task<int> Handle(AddEmployeeCommand request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new FluentValidationException(validationResult.ToString());
+        }
+        
         var companyExists = _companyRepository.CompanyExistsAsync(request.CompanyId);
         var passportExists = _passportRepository.PassportExistsAsync(request.PassportId);
         var departmentExists = _departmentRepository.DepartmentExistsAsync(request.DepartmentId);

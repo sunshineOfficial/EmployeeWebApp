@@ -1,5 +1,7 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
+using FluentValidation;
 using MediatR;
 
 namespace EmployeeWebApp.Application.Companies.AddCompany;
@@ -10,10 +12,12 @@ namespace EmployeeWebApp.Application.Companies.AddCompany;
 public class AddCompanyCommandHandler : IRequestHandler<AddCompanyCommand, int>
 {
     private readonly ICompanyRepository _companyRepository;
+    private readonly IValidator<AddCompanyCommand> _validator;
 
-    public AddCompanyCommandHandler(ICompanyRepository companyRepository)
+    public AddCompanyCommandHandler(ICompanyRepository companyRepository, IValidator<AddCompanyCommand> validator)
     {
         _companyRepository = companyRepository;
+        _validator = validator;
     }
 
     /// <summary>
@@ -24,6 +28,13 @@ public class AddCompanyCommandHandler : IRequestHandler<AddCompanyCommand, int>
     /// <returns>Id компании.</returns>
     public async Task<int> Handle(AddCompanyCommand request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new FluentValidationException(validationResult.ToString());
+        }
+        
         var company = new Company
         {
             Name = request.Name

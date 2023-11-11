@@ -1,7 +1,7 @@
 namespace EmployeeWebApp.Domain.Exceptions;
 
 /// <summary>
-/// Класс исключения PassportNotFoundException.
+/// Класс исключения PassportNotFound.
 /// </summary>
 public class PassportNotFoundException : NotFoundException
 {

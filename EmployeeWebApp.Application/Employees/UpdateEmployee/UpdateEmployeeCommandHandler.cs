@@ -1,6 +1,7 @@
 using EmployeeWebApp.Domain.Entities;
 using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
+using FluentValidation;
 using MediatR;
 
 namespace EmployeeWebApp.Application.Employees.UpdateEmployee;
@@ -11,10 +12,12 @@ namespace EmployeeWebApp.Application.Employees.UpdateEmployee;
 public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand>
 {
     private readonly IEmployeeRepository _employeeRepository;
+    private readonly IValidator<UpdateEmployeeCommand> _validator;
 
-    public UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepository)
+    public UpdateEmployeeCommandHandler(IEmployeeRepository employeeRepository, IValidator<UpdateEmployeeCommand> validator)
     {
         _employeeRepository = employeeRepository;
+        _validator = validator;
     }
 
     /// <summary>
@@ -24,6 +27,13 @@ public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeComman
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     public async Task Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken = default)
     {
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new FluentValidationException(validationResult.ToString());
+        }
+        
         if (!await _employeeRepository.EmployeeExistsAsync(request.Id))
         {
             throw new EmployeeNotFoundException(request.Id);

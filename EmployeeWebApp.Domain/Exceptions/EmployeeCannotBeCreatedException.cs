@@ -1,7 +1,7 @@
 namespace EmployeeWebApp.Domain.Exceptions;
 
 /// <summary>
-/// Класс исключения EmployeeCannotBeCreatedException.
+/// Класс исключения EmployeeCannotBeCreated.
 /// </summary>
 public class EmployeeCannotBeCreatedException : BadRequestException
 {
