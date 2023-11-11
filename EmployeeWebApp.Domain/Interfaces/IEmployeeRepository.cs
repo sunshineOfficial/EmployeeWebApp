@@ -21,6 +21,13 @@ public interface IEmployeeRepository
     Task DeleteEmployeeAsync(int id);
     
     /// <summary>
+    /// Получает сотрудника.
+    /// </summary>
+    /// <param name="id">Id сотрудника.</param>
+    /// <returns>Сотрудник с указанным id.</returns>
+    Task<Employee> GetEmployeeAsync(int id);
+    
+    /// <summary>
     /// Получает всех сотрудников для указанной компании.
     /// </summary>
     /// <param name="companyId">Id компании.</param>

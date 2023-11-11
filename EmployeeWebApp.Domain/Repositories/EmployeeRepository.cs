@@ -43,6 +43,19 @@ public class EmployeeRepository : IEmployeeRepository
     }
 
     /// <inheritdoc/>
+    public async Task<Employee> GetEmployeeAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"SELECT * FROM ""Employees""
+                    WHERE ""Id"" = @Id;";
+
+        var employee = await connection.QuerySingleAsync<Employee>(sql, new { Id = id });
+
+        return employee;
+    }
+
+    /// <inheritdoc/>
     public async Task<IEnumerable<Employee>> GetEmployeesByCompanyIdAsync(int companyId)
     {
         using var connection = new NpgsqlConnection(_dbConnection);
@@ -78,9 +91,9 @@ public class EmployeeRepository : IEmployeeRepository
                         ""Name"" = CASE WHEN @Name IS NULL THEN ""Name"" ELSE @Name END,
                         ""Surname"" = CASE WHEN @Surname IS NULL THEN ""Surname"" ELSE @Surname END,
                         ""Phone"" = CASE WHEN @Phone IS NULL THEN ""Phone"" ELSE @Phone END,
-                        ""CompanyId"" = CASE WHEN @CompanyId IS NULL THEN ""CompanyId"" ELSE @CompanyId END,
-                        ""PassportId"" = CASE WHEN @PassportId IS NULL THEN ""PassportId"" ELSE @PassportId END,
-                        ""DepartmentId"" = CASE WHEN @DepartmentId IS NULL THEN ""DepartmentId"" ELSE @DepartmentId END
+                        ""CompanyId"" = CASE WHEN @CompanyId = 0 THEN ""CompanyId"" ELSE @CompanyId END,
+                        ""PassportId"" = CASE WHEN @PassportId = 0 THEN ""PassportId"" ELSE @PassportId END,
+                        ""DepartmentId"" = CASE WHEN @DepartmentId = 0 THEN ""DepartmentId"" ELSE @DepartmentId END
                     WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new

@@ -38,7 +38,7 @@ public class PassportController : ControllerBase
     /// Получает паспорт.
     /// </summary>
     /// <param name="id">Id паспорта.</param>
-    /// <returns>паспорт с указанным id.</returns>
+    /// <returns>Паспорт с указанным id.</returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPassportAsync(int id)
     {
