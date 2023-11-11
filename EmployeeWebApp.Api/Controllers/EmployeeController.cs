@@ -1,6 +1,8 @@
 using EmployeeWebApp.Application.Employees.AddEmployee;
 using EmployeeWebApp.Application.Employees.DeleteEmployee;
 using EmployeeWebApp.Application.Employees.GetEmployee;
+using EmployeeWebApp.Application.Employees.GetEmployeesByCompanyId;
+using EmployeeWebApp.Application.Employees.GetEmployeesByDepartmentId;
 using EmployeeWebApp.Application.Employees.UpdateEmployee;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -76,5 +78,23 @@ public class EmployeeController : ControllerBase
         await _mediator.Send(command);
 
         return Ok();
+    }
+
+    /// <summary>
+    /// Получает всех сотрудников для указанной компании или отдела.
+    /// </summary>
+    /// <param name="companyId">Id компании.</param>
+    /// <param name="departmentId">Id отдела.</param>
+    /// <returns>Перечисление, содержащее всех сотрудников для указанной компании или отдела.</returns>
+    [HttpGet]
+    public async Task<IActionResult> GetEmployeesByCompanyIdOrDepartmentIdAsync(int companyId = 0, int departmentId = 0)
+    {
+        IRequest<IEnumerable<GetEmployeeResponse>> query = companyId != 0
+            ? new GetEmployeesByCompanyIdQuery { CompanyId = companyId }
+            : new GetEmployeesByDepartmentIdQuery { DepartmentId = departmentId };
+
+        var employees = await _mediator.Send(query);
+
+        return Ok(employees);
     }
 }
