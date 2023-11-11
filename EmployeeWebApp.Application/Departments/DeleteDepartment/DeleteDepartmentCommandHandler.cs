@@ -1,3 +1,4 @@
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -22,6 +23,11 @@ public class DeleteDepartmentCommandHandler : IRequestHandler<DeleteDepartmentCo
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     public async Task Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken = default)
     {
+        if (!await _departmentRepository.DepartmentExistsAsync(request.Id))
+        {
+            throw new DepartmentNotFoundException(request.Id);
+        }
+        
         await _departmentRepository.DeleteDepartmentAsync(request.Id);
     }
 }

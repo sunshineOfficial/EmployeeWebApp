@@ -1,3 +1,4 @@
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -30,6 +31,12 @@ public class GetEmployeeQueryHandler : IRequestHandler<GetEmployeeQuery, GetEmpl
     public async Task<GetEmployeeResponse> Handle(GetEmployeeQuery request, CancellationToken cancellationToken = default)
     {
         var employee = await _employeeRepository.GetEmployeeAsync(request.Id);
+
+        if (employee is null)
+        {
+            throw new EmployeeNotFoundException(request.Id);
+        }
+        
         var company = _companyRepository.GetCompanyAsync(employee.CompanyId);
         var passport = _passportRepository.GetPassportAsync(employee.PassportId);
         var department = _departmentRepository.GetDepartmentAsync(employee.DepartmentId);

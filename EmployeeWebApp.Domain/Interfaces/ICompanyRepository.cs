@@ -33,4 +33,11 @@ public interface ICompanyRepository
     /// </summary>
     /// <param name="id">Id компании.</param>
     Task DeleteCompanyAsync(int id);
+
+    /// <summary>
+    /// Проверяет, существует ли компания с указанным id.
+    /// </summary>
+    /// <param name="id">Id компании.</param>
+    /// <returns><see langword="true"/>, если компания существует, иначе - <see langword="false"/></returns>
+    Task<bool> CompanyExistsAsync(int id);
 }

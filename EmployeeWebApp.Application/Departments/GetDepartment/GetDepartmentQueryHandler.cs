@@ -1,4 +1,5 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -24,6 +25,13 @@ public class GetDepartmentQueryHandler : IRequestHandler<GetDepartmentQuery, Dep
     /// <returns>Отдел с указанным id.</returns>
     public async Task<Department> Handle(GetDepartmentQuery request, CancellationToken cancellationToken = default)
     {
-        return await _departmentRepository.GetDepartmentAsync(request.Id);
+        var department = await _departmentRepository.GetDepartmentAsync(request.Id);
+
+        if (department is null)
+        {
+            throw new DepartmentNotFoundException(request.Id);
+        }
+        
+        return department;
     }
 }

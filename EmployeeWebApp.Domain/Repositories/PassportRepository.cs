@@ -40,7 +40,7 @@ public class PassportRepository : IPassportRepository
         var sql = @"SELECT * FROM ""Passports""
                     WHERE ""Id"" = @Id;";
 
-        var passport = await connection.QuerySingleAsync<Passport>(sql, new { Id = id });
+        var passport = await connection.QuerySingleOrDefaultAsync<Passport>(sql, new { Id = id });
 
         return passport;
     }
@@ -67,5 +67,15 @@ public class PassportRepository : IPassportRepository
         var sql = @"DELETE FROM ""Passports"" WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> PassportExistsAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"SELECT count(1) FROM ""Passports"" WHERE ""Id"" = @Id;";
+
+        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
     }
 }

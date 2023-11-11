@@ -1,4 +1,5 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -10,10 +11,16 @@ namespace EmployeeWebApp.Application.Employees.AddEmployee;
 public class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand, int>
 {
     private readonly IEmployeeRepository _employeeRepository;
+    private readonly ICompanyRepository _companyRepository;
+    private readonly IPassportRepository _passportRepository;
+    private readonly IDepartmentRepository _departmentRepository;
 
-    public AddEmployeeCommandHandler(IEmployeeRepository employeeRepository)
+    public AddEmployeeCommandHandler(IEmployeeRepository employeeRepository, ICompanyRepository companyRepository, IPassportRepository passportRepository, IDepartmentRepository departmentRepository)
     {
         _employeeRepository = employeeRepository;
+        _companyRepository = companyRepository;
+        _passportRepository = passportRepository;
+        _departmentRepository = departmentRepository;
     }
 
     /// <summary>
@@ -24,6 +31,17 @@ public class AddEmployeeCommandHandler : IRequestHandler<AddEmployeeCommand, int
     /// <returns>Id cотрудника.</returns>
     public async Task<int> Handle(AddEmployeeCommand request, CancellationToken cancellationToken = default)
     {
+        var companyExists = _companyRepository.CompanyExistsAsync(request.CompanyId);
+        var passportExists = _passportRepository.PassportExistsAsync(request.PassportId);
+        var departmentExists = _departmentRepository.DepartmentExistsAsync(request.DepartmentId);
+
+        Task.WaitAll(companyExists, passportExists, departmentExists);
+
+        if (!(companyExists.Result && passportExists.Result && departmentExists.Result))
+        {
+            throw new EmployeeCannotBeCreatedException(request.CompanyId, request.PassportId, request.DepartmentId);
+        }
+        
         var employee = new Employee
         {
             Name = request.Name,

@@ -1,4 +1,5 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -24,6 +25,13 @@ public class GetCompanyQueryHandler : IRequestHandler<GetCompanyQuery, Company>
     /// <returns>Компания с указанным id.</returns>
     public async Task<Company> Handle(GetCompanyQuery request, CancellationToken cancellationToken = default)
     {
-        return await _companyRepository.GetCompanyAsync(request.Id);
+        var company = await _companyRepository.GetCompanyAsync(request.Id);
+
+        if (company is null)
+        {
+            throw new CompanyNotFoundException(request.Id);
+        }
+        
+        return company;
     }
 }

@@ -47,4 +47,11 @@ public interface IEmployeeRepository
     /// <param name="id">Id сотрудника.</param>
     /// <param name="updatedEmployee">Измененный сотрудник.</param>
     Task UpdateEmployeeAsync(int id, Employee updatedEmployee);
+    
+    /// <summary>
+    /// Проверяет, существует ли сотрудник с указанным id.
+    /// </summary>
+    /// <param name="id">Id сотрудника.</param>
+    /// <returns><see langword="true"/>, если сотрудник существует, иначе - <see langword="false"/></returns>
+    Task<bool> EmployeeExistsAsync(int id);
 }

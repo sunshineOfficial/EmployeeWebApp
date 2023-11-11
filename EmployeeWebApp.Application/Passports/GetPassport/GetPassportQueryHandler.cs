@@ -1,4 +1,5 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -24,6 +25,13 @@ public class GetPassportQueryHandler : IRequestHandler<GetPassportQuery, Passpor
     /// <returns>Паспорт с указанным id.</returns>
     public async Task<Passport> Handle(GetPassportQuery request, CancellationToken cancellationToken)
     {
-        return await _passportRepository.GetPassportAsync(request.Id);
+        var passport = await _passportRepository.GetPassportAsync(request.Id);
+
+        if (passport is null)
+        {
+            throw new PassportNotFoundException(request.Id);
+        }
+        
+        return passport;
     }
 }

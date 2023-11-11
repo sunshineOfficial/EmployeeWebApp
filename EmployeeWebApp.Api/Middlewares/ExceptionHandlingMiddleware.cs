@@ -28,7 +28,12 @@ internal sealed class ExceptionHandlingMiddleware : IMiddleware
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    /// <summary>
+    /// Обрабатывает исключение.
+    /// </summary>
+    /// <param name="context">Контекст HTTP-запроса и HTTP-ответа.</param>
+    /// <param name="exception">Исключение.</param>
+    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.StatusCode = exception switch
         {

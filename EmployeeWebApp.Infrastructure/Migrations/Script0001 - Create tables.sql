@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS public."Employees"
     "Name" character varying(50) NOT NULL,
     "Surname" character varying(50) NOT NULL,
     "Phone" character varying(20) NOT NULL,
-    "CompanyId" integer NOT NULL references "Companies"("Id"),
-    "PassportId" integer NOT NULL references "Passports"("Id"),
-    "DepartmentId" integer NOT NULL references "Departments"("Id"),
+    "CompanyId" integer NOT NULL references "Companies"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+    "PassportId" integer NOT NULL references "Passports"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+    "DepartmentId" integer NOT NULL references "Departments"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY ("Id")
 );

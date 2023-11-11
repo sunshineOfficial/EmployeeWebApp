@@ -1,3 +1,4 @@
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -22,6 +23,11 @@ public class DeletePassportCommandHandler : IRequestHandler<DeletePassportComman
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     public async Task Handle(DeletePassportCommand request, CancellationToken cancellationToken = default)
     {
+        if (!await _passportRepository.PassportExistsAsync(request.Id))
+        {
+            throw new PassportNotFoundException(request.Id);
+        }
+        
         await _passportRepository.DeletePassportAsync(request.Id);
     }
 }

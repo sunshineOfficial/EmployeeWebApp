@@ -1,4 +1,5 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -23,6 +24,11 @@ public class UpdatePassportCommandHandler : IRequestHandler<UpdatePassportComman
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     public async Task Handle(UpdatePassportCommand request, CancellationToken cancellationToken = default)
     {
+        if (!await _passportRepository.PassportExistsAsync(request.Id))
+        {
+            throw new PassportNotFoundException(request.Id);
+        }
+        
         var passport = new Passport { Type = request.Type, Number = request.Number };
 
         await _passportRepository.UpdatePassportAsync(request.Id, passport);

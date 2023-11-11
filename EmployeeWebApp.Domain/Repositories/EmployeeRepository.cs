@@ -50,7 +50,7 @@ public class EmployeeRepository : IEmployeeRepository
         var sql = @"SELECT * FROM ""Employees""
                     WHERE ""Id"" = @Id;";
 
-        var employee = await connection.QuerySingleAsync<Employee>(sql, new { Id = id });
+        var employee = await connection.QuerySingleOrDefaultAsync<Employee>(sql, new { Id = id });
 
         return employee;
     }
@@ -106,5 +106,15 @@ public class EmployeeRepository : IEmployeeRepository
             updatedEmployee.PassportId,
             updatedEmployee.DepartmentId
         });
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> EmployeeExistsAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"SELECT count(1) FROM ""Employees"" WHERE ""Id"" = @Id;";
+
+        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
     }
 }

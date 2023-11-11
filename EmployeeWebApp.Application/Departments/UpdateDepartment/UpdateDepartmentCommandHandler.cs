@@ -1,4 +1,5 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -23,6 +24,11 @@ public class UpdateDepartmentCommandHandler : IRequestHandler<UpdateDepartmentCo
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     public async Task Handle(UpdateDepartmentCommand request, CancellationToken cancellationToken = default)
     {
+        if (!await _departmentRepository.DepartmentExistsAsync(request.Id))
+        {
+            throw new DepartmentNotFoundException(request.Id);
+        }
+        
         var department = new Department { Name = request.Name, Phone = request.Phone };
 
         await _departmentRepository.UpdateDepartmentAsync(request.Id, department);

@@ -40,7 +40,7 @@ public class CompanyRepository : ICompanyRepository
         var sql = @"SELECT * FROM ""Companies""
                     WHERE ""Id"" = @Id;";
 
-        var company = await connection.QuerySingleAsync<Company>(sql, new { Id = id });
+        var company = await connection.QuerySingleOrDefaultAsync<Company>(sql, new { Id = id });
 
         return company;
     }
@@ -65,5 +65,15 @@ public class CompanyRepository : ICompanyRepository
         var sql = @"DELETE FROM ""Companies"" WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> CompanyExistsAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"SELECT count(1) FROM ""Companies"" WHERE ""Id"" = @Id;";
+
+        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
     }
 }

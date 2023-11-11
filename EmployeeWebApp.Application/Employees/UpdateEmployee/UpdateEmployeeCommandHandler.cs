@@ -1,4 +1,5 @@
 using EmployeeWebApp.Domain.Entities;
+using EmployeeWebApp.Domain.Exceptions;
 using EmployeeWebApp.Domain.Interfaces;
 using MediatR;
 
@@ -23,6 +24,11 @@ public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeComman
     /// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
     public async Task Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken = default)
     {
+        if (!await _employeeRepository.EmployeeExistsAsync(request.Id))
+        {
+            throw new EmployeeNotFoundException(request.Id);
+        }
+        
         var employee = new Employee
         {
             Name = request.Name,

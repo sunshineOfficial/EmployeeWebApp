@@ -40,7 +40,7 @@ public class DepartmentRepository : IDepartmentRepository
         var sql = @"SELECT * FROM ""Departments""
                     WHERE ""Id"" = @Id;";
 
-        var department = await connection.QuerySingleAsync<Department>(sql, new { Id = id });
+        var department = await connection.QuerySingleOrDefaultAsync<Department>(sql, new { Id = id });
 
         return department;
     }
@@ -67,5 +67,15 @@ public class DepartmentRepository : IDepartmentRepository
         var sql = @"DELETE FROM ""Departments"" WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> DepartmentExistsAsync(int id)
+    {
+        using var connection = new NpgsqlConnection(_dbConnection);
+
+        var sql = @"SELECT count(1) FROM ""Departments"" WHERE ""Id"" = @Id;";
+
+        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
     }
 }

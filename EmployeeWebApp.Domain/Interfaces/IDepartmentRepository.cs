@@ -33,4 +33,11 @@ public interface IDepartmentRepository
     /// </summary>
     /// <param name="id">Id отдела.</param>
     Task DeleteDepartmentAsync(int id);
+    
+    /// <summary>
+    /// Проверяет, существует ли отдел с указанным id.
+    /// </summary>
+    /// <param name="id">Id отдела.</param>
+    /// <returns><see langword="true"/>, если отдел существует, иначе - <see langword="false"/></returns>
+    Task<bool> DepartmentExistsAsync(int id);
 }

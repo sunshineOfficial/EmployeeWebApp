@@ -33,4 +33,11 @@ public interface IPassportRepository
     /// </summary>
     /// <param name="id">Id паспорта.</param>
     Task DeletePassportAsync(int id);
+    
+    /// <summary>
+    /// Проверяет, существует ли паспорт с указанным id.
+    /// </summary>
+    /// <param name="id">Id паспорта.</param>
+    /// <returns><see langword="true"/>, если паспорт существует, иначе - <see langword="false"/></returns>
+    Task<bool> PassportExistsAsync(int id);
 }
