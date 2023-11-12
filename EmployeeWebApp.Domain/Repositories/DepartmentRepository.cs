@@ -28,6 +28,7 @@ public class DepartmentRepository : IDepartmentRepository
                     RETURNING ""Id"";";
 
         var id = await connection.ExecuteScalarAsync<int>(sql, department);
+        await connection.CloseAsync();
 
         return id;
     }
@@ -41,6 +42,7 @@ public class DepartmentRepository : IDepartmentRepository
                     WHERE ""Id"" = @Id;";
 
         var department = await connection.QuerySingleOrDefaultAsync<Department>(sql, new { Id = id });
+        await connection.CloseAsync();
 
         return department;
     }
@@ -57,6 +59,7 @@ public class DepartmentRepository : IDepartmentRepository
                     WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id, updatedDepartment.Name, updatedDepartment.Phone });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -67,6 +70,7 @@ public class DepartmentRepository : IDepartmentRepository
         var sql = @"DELETE FROM ""Departments"" WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -76,6 +80,9 @@ public class DepartmentRepository : IDepartmentRepository
 
         var sql = @"SELECT count(1) FROM ""Departments"" WHERE ""Id"" = @Id;";
 
-        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        var exists = await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        await connection.CloseAsync();
+
+        return exists;
     }
 }

@@ -28,6 +28,7 @@ public class CompanyRepository : ICompanyRepository
                     RETURNING ""Id"";";
 
         var id = await connection.ExecuteScalarAsync<int>(sql, company);
+        await connection.CloseAsync();
 
         return id;
     }
@@ -41,6 +42,7 @@ public class CompanyRepository : ICompanyRepository
                     WHERE ""Id"" = @Id;";
 
         var company = await connection.QuerySingleOrDefaultAsync<Company>(sql, new { Id = id });
+        await connection.CloseAsync();
 
         return company;
     }
@@ -55,6 +57,7 @@ public class CompanyRepository : ICompanyRepository
                     WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id, updatedCompany.Name });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -65,6 +68,7 @@ public class CompanyRepository : ICompanyRepository
         var sql = @"DELETE FROM ""Companies"" WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -74,6 +78,9 @@ public class CompanyRepository : ICompanyRepository
 
         var sql = @"SELECT count(1) FROM ""Companies"" WHERE ""Id"" = @Id;";
 
-        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        var exists = await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        await connection.CloseAsync();
+
+        return exists;
     }
 }

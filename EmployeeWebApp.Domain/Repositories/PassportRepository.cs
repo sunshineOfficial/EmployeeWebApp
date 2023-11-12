@@ -28,6 +28,7 @@ public class PassportRepository : IPassportRepository
                     RETURNING ""Id"";";
 
         var id = await connection.ExecuteScalarAsync<int>(sql, passport);
+        await connection.CloseAsync();
 
         return id;
     }
@@ -41,6 +42,7 @@ public class PassportRepository : IPassportRepository
                     WHERE ""Id"" = @Id;";
 
         var passport = await connection.QuerySingleOrDefaultAsync<Passport>(sql, new { Id = id });
+        await connection.CloseAsync();
 
         return passport;
     }
@@ -57,6 +59,7 @@ public class PassportRepository : IPassportRepository
                     WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id, updatedPassport.Type, updatedPassport.Number });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -67,6 +70,7 @@ public class PassportRepository : IPassportRepository
         var sql = @"DELETE FROM ""Passports"" WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -76,6 +80,9 @@ public class PassportRepository : IPassportRepository
 
         var sql = @"SELECT count(1) FROM ""Passports"" WHERE ""Id"" = @Id;";
 
-        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        var exists = await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        await connection.CloseAsync();
+
+        return exists;
     }
 }

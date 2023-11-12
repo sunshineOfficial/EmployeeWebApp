@@ -28,6 +28,7 @@ public class EmployeeRepository : IEmployeeRepository
                     RETURNING ""Id"";";
 
         var id = await connection.ExecuteScalarAsync<int>(sql, employee);
+        await connection.CloseAsync();
 
         return id;
     }
@@ -40,6 +41,7 @@ public class EmployeeRepository : IEmployeeRepository
         var sql = @"DELETE FROM ""Employees"" WHERE ""Id"" = @Id;";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -51,6 +53,7 @@ public class EmployeeRepository : IEmployeeRepository
                     WHERE ""Id"" = @Id;";
 
         var employee = await connection.QuerySingleOrDefaultAsync<Employee>(sql, new { Id = id });
+        await connection.CloseAsync();
 
         return employee;
     }
@@ -64,6 +67,7 @@ public class EmployeeRepository : IEmployeeRepository
                     WHERE ""CompanyId"" = @CompanyId;";
 
         var employees = await connection.QueryAsync<Employee>(sql, new { CompanyId = companyId });
+        await connection.CloseAsync();
 
         return employees;
     }
@@ -77,6 +81,7 @@ public class EmployeeRepository : IEmployeeRepository
                     WHERE ""DepartmentId"" = @DepartmentId;";
 
         var employees = await connection.QueryAsync<Employee>(sql, new { DepartmentId = departmentId });
+        await connection.CloseAsync();
 
         return employees;
     }
@@ -106,6 +111,7 @@ public class EmployeeRepository : IEmployeeRepository
             updatedEmployee.PassportId,
             updatedEmployee.DepartmentId
         });
+        await connection.CloseAsync();
     }
 
     /// <inheritdoc/>
@@ -115,6 +121,9 @@ public class EmployeeRepository : IEmployeeRepository
 
         var sql = @"SELECT count(1) FROM ""Employees"" WHERE ""Id"" = @Id;";
 
-        return await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        var exists = await connection.ExecuteScalarAsync<bool>(sql, new { Id = id });
+        await connection.CloseAsync();
+
+        return exists;
     }
 }
