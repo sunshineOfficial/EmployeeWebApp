@@ -21,7 +21,7 @@ public class CompanyRepository : ICompanyRepository
     /// <inheritdoc/>
     public async Task<int> AddCompanyAsync(Company company)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
         
         var sql = @"INSERT INTO ""Companies"" (""Name"")
                     VALUES (@Name)
@@ -35,7 +35,7 @@ public class CompanyRepository : ICompanyRepository
     /// <inheritdoc/>
     public async Task<Company> GetCompanyAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Companies""
                     WHERE ""Id"" = @Id;";
@@ -48,7 +48,7 @@ public class CompanyRepository : ICompanyRepository
     /// <inheritdoc/>
     public async Task UpdateCompanyAsync(int id, Company updatedCompany)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"UPDATE ""Companies""
                     SET ""Name"" = CASE WHEN @Name IS NULL THEN ""Name"" ELSE @Name END
@@ -60,7 +60,7 @@ public class CompanyRepository : ICompanyRepository
     /// <inheritdoc/>
     public async Task DeleteCompanyAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"DELETE FROM ""Companies"" WHERE ""Id"" = @Id;";
 
@@ -70,7 +70,7 @@ public class CompanyRepository : ICompanyRepository
     /// <inheritdoc/>
     public async Task<bool> CompanyExistsAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT count(1) FROM ""Companies"" WHERE ""Id"" = @Id;";
 

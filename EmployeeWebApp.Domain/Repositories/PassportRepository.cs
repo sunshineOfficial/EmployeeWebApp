@@ -21,7 +21,7 @@ public class PassportRepository : IPassportRepository
     /// <inheritdoc/>
     public async Task<int> AddPassportAsync(Passport passport)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
         
         var sql = @"INSERT INTO ""Passports"" (""Type"", ""Number"")
                     VALUES (@Type, @Number)
@@ -35,7 +35,7 @@ public class PassportRepository : IPassportRepository
     /// <inheritdoc/>
     public async Task<Passport> GetPassportAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Passports""
                     WHERE ""Id"" = @Id;";
@@ -48,7 +48,7 @@ public class PassportRepository : IPassportRepository
     /// <inheritdoc/>
     public async Task UpdatePassportAsync(int id, Passport updatedPassport)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"UPDATE ""Passports""
                     SET
@@ -62,7 +62,7 @@ public class PassportRepository : IPassportRepository
     /// <inheritdoc/>
     public async Task DeletePassportAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"DELETE FROM ""Passports"" WHERE ""Id"" = @Id;";
 
@@ -72,7 +72,7 @@ public class PassportRepository : IPassportRepository
     /// <inheritdoc/>
     public async Task<bool> PassportExistsAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT count(1) FROM ""Passports"" WHERE ""Id"" = @Id;";
 

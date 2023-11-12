@@ -21,7 +21,7 @@ public class EmployeeRepository : IEmployeeRepository
     /// <inheritdoc/>
     public async Task<int> AddEmployeeAsync(Employee employee)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"INSERT INTO ""Employees"" (""Name"", ""Surname"", ""Phone"", ""CompanyId"", ""PassportId"", ""DepartmentId"")
                     VALUES (@Name, @Surname, @Phone, @CompanyId, @PassportId, @DepartmentId)
@@ -35,7 +35,7 @@ public class EmployeeRepository : IEmployeeRepository
     /// <inheritdoc/>
     public async Task DeleteEmployeeAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"DELETE FROM ""Employees"" WHERE ""Id"" = @Id;";
 
@@ -45,7 +45,7 @@ public class EmployeeRepository : IEmployeeRepository
     /// <inheritdoc/>
     public async Task<Employee> GetEmployeeAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Employees""
                     WHERE ""Id"" = @Id;";
@@ -58,7 +58,7 @@ public class EmployeeRepository : IEmployeeRepository
     /// <inheritdoc/>
     public async Task<IEnumerable<Employee>> GetEmployeesByCompanyIdAsync(int companyId)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Employees""
                     WHERE ""CompanyId"" = @CompanyId;";
@@ -71,7 +71,7 @@ public class EmployeeRepository : IEmployeeRepository
     /// <inheritdoc/>
     public async Task<IEnumerable<Employee>> GetEmployeesByDepartmentIdAsync(int departmentId)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Employees""
                     WHERE ""DepartmentId"" = @DepartmentId;";
@@ -84,7 +84,7 @@ public class EmployeeRepository : IEmployeeRepository
     /// <inheritdoc/>
     public async Task UpdateEmployeeAsync(int id, Employee updatedEmployee)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"UPDATE ""Employees""
                     SET
@@ -111,7 +111,7 @@ public class EmployeeRepository : IEmployeeRepository
     /// <inheritdoc/>
     public async Task<bool> EmployeeExistsAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT count(1) FROM ""Employees"" WHERE ""Id"" = @Id;";
 

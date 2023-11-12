@@ -21,7 +21,7 @@ public class DepartmentRepository : IDepartmentRepository
     /// <inheritdoc/>
     public async Task<int> AddDepartmentAsync(Department department)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
         
         var sql = @"INSERT INTO ""Departments"" (""Name"", ""Phone"")
                     VALUES (@Name, @Phone)
@@ -35,7 +35,7 @@ public class DepartmentRepository : IDepartmentRepository
     /// <inheritdoc/>
     public async Task<Department> GetDepartmentAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT * FROM ""Departments""
                     WHERE ""Id"" = @Id;";
@@ -48,7 +48,7 @@ public class DepartmentRepository : IDepartmentRepository
     /// <inheritdoc/>
     public async Task UpdateDepartmentAsync(int id, Department updatedDepartment)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"UPDATE ""Departments""
                     SET
@@ -62,7 +62,7 @@ public class DepartmentRepository : IDepartmentRepository
     /// <inheritdoc/>
     public async Task DeleteDepartmentAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"DELETE FROM ""Departments"" WHERE ""Id"" = @Id;";
 
@@ -72,7 +72,7 @@ public class DepartmentRepository : IDepartmentRepository
     /// <inheritdoc/>
     public async Task<bool> DepartmentExistsAsync(int id)
     {
-        using var connection = new NpgsqlConnection(_dbConnection);
+        await using var connection = new NpgsqlConnection(_dbConnection);
 
         var sql = @"SELECT count(1) FROM ""Departments"" WHERE ""Id"" = @Id;";
 
