@@ -5,10 +5,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["EmployeeWebApp.Api/EmployeeWebApp.Api.csproj", "EmployeeWebApp.Api/"]
+COPY ["src/EmployeeWebApp.Api/EmployeeWebApp.Api.csproj", "EmployeeWebApp.Api/"]
 RUN dotnet restore "EmployeeWebApp.Api/EmployeeWebApp.Api.csproj"
 COPY . .
-WORKDIR "/src/EmployeeWebApp.Api"
+WORKDIR "/src/src/EmployeeWebApp.Api"
 RUN dotnet build "EmployeeWebApp.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
