@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  employeeweb.api:
+    image: employee-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - postgres
+  
+  db:
+    image: postgres
+    volumes:
+      - './volumes/db:/var/lib/postgresql'
+    environment:
+      POSTGRES_DB: "employeewebapp"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1"
+    ports:
+      - "5433:5432"
+    networks:
+      - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+networks:
+  postgres:
+    driver: bridge
