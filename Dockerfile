@@ -6,9 +6,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["EmployeeWebApp.Api/EmployeeWebApp.Api.csproj", "EmployeeWebApp.Api/"]
-COPY ["EmployeeWebApp.Application/EmployeeWebApp.Application.csproj", "EmployeeWebApp.Application/"]
-COPY ["EmployeeWebApp.Domain/EmployeeWebApp.Domain.csproj", "EmployeeWebApp.Domain/"]
-COPY ["EmployeeWebApp.Infrastructure/EmployeeWebApp.Infrastructure.csproj", "EmployeeWebApp.Infrastructure/"]
 RUN dotnet restore "EmployeeWebApp.Api/EmployeeWebApp.Api.csproj"
 COPY . .
 WORKDIR "/src/EmployeeWebApp.Api"

@@ -18,7 +18,7 @@ services:
   db:
     image: postgres
     volumes:
-      - './volumes/db:/var/lib/postgresql'
+      - db-data:/var/lib/postgresql
     environment:
       POSTGRES_DB: "employeewebapp"
       POSTGRES_USER: "postgres"
@@ -36,3 +36,6 @@ services:
 networks:
   postgres:
     driver: bridge
+
+volumes:
+  db-data:
