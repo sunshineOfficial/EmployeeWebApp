@@ -25,4 +25,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\EmployeeWebApp.Application\EmployeeWebApp.Application.csproj" />
+    </ItemGroup>
+
 </Project>
